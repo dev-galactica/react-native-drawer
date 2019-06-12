@@ -280,7 +280,6 @@ export default class Drawer extends Component {
     let length = this._prevLength + delta
     length = Math.min(length, this.getOpenLength())
     length = Math.max(length, this.getClosedLength())
-    length = Math.round(length*2)/2
     this._length = length
 
     this.updatePosition()
@@ -305,7 +304,7 @@ export default class Drawer extends Component {
     let inMask = this.testPanResponderMask(e, gestureState)
     if (!inMask) return false
     // skip gesture process if we have mostly vertical swipe
-    // if (!this._open && Math.abs(gestureState.dy) >= Math.abs(gestureState.dx)) return false
+    if (!this._open && Math.abs(gestureState.dy) >= Math.abs(gestureState.dx)) return false
     this._panStartTime = Date.now()
     if (inMask && this.shouldCaptureGestures()) return true
     if (this.props.negotiatePan) return false
@@ -398,7 +397,7 @@ export default class Drawer extends Component {
       duration: this.props.tweenDuration,
       easingType: this.props.tweenEasing,
       onFrame: (tweenValue) => {
-	this._length = Math.round(tweenValue*2)/2;
+        this._length = tweenValue
         this.updatePosition()
       },
       onEnd: () => {
@@ -432,7 +431,7 @@ export default class Drawer extends Component {
       easingType: this.props.tweenEasing,
       duration: this.props.tweenDuration,
       onFrame: (tweenValue) => {
-	this._length = Math.round(tweenValue*2)/2;
+        this._length = tweenValue
         this.updatePosition()
       },
       onEnd: () => {
